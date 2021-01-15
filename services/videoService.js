@@ -1,8 +1,8 @@
 /*
  * @Author: Mzz 
  * @Date: 2020-12-25 10:05:25 
- * @Last Modified by: Mzz
- * @Last Modified time: 2020-12-25 14:16:03
+ * @Last Modified by: mzz
+ * @Last Modified time: 2021-01-12 21:55:14
  * 描述：视频相关接口
  */
 
@@ -29,7 +29,6 @@ async function getVideo(req, res, next) {
                 arrary.push({ title: types[i], list: data })
 
             })
-
         }
         res.json({
             code: CODE_SUCCESS,

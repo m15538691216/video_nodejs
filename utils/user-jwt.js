@@ -29,6 +29,9 @@ const jwtAuth = expressJwt({
     '/api/login',
     '/api/getVideo',
     '/api/getLabel',
+    '/api/crawl/crawlVideo',
+    '/api/crawl/crawlVideoDetails',
+    '/api/crawl/crawlVideoPath'
   ]
 })
 

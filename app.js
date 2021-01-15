@@ -29,7 +29,7 @@ app.use(cors()); // 注入cors模块解决跨域
 
 app.use('/', routes);
 
-const hostname = '192.168.101.163';
+const hostname = '127.0.0.1';
 const port = 3000;
 
 app.listen(port, hostname, () => { // 监听8088端口

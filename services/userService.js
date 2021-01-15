@@ -23,11 +23,8 @@ const {
 // 登录
 function login(req, res, next) {
   const err = validationResult(req);
-  // 如果验证错误，empty不为空
   if (!err.isEmpty()) {
-    // 获取错误信息
     const [{ msg }] = err.errors;
-    // 抛出错误，交给我们自定义的统一异常处理程序进行错误返回 
     next(boom.badRequest(msg));
   } else {
     let { username, password } = req.body;

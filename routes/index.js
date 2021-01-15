@@ -13,6 +13,7 @@ const router = express.Router(); // 注册路由
 const userRouter = require('./users'); // 引入user路由模块
 const videoRouter = require('./video'); // 引入video路由模块
 const CommonRouter = require('./common'); // 引入video路由模块
+const CrawlRouter = require('./crawling'); // 引入video路由模块
 
 
 
@@ -21,6 +22,7 @@ router.use(jwtAuth); // 注入认证模块
 router.use('/api', userRouter); // 注入用户路由模块
 router.use('/api', videoRouter); // 注入视频路由模块
 router.use('/api', CommonRouter); // 注入视频路由模块
+router.use('/api/crawl', CrawlRouter); // 注入视频路由模块
 
 
 // 自定义统一异常处理中间件，需要放在代码最后

@@ -7,6 +7,8 @@
 
 const mysql = require('mysql');
 const config = require('../db/dbConfig');
+const { body, validationResult } = require('express-validator');
+const boom = require('boom');
 
 // 连接mysql
 function connect() {
@@ -20,7 +22,7 @@ function connect() {
 }
 
 // 新建查询连接
-function querySql(sql) { 
+function querySql(sql) {
   const conn = connect();
   return new Promise((resolve, reject) => {
     try {
@@ -55,7 +57,19 @@ function queryOne(sql) {
   })
 }
 
+
+function validaErr(req){
+  const err = validationResult(req);
+  if (!err.isEmpty()) {
+    const [{ msg }] = err.errors;
+    next(boom.badRequest(msg));
+  } else {
+    return true;
+  }
+}
+
 module.exports = {
   querySql,
-  queryOne
+  queryOne,
+  validaErr
 }
