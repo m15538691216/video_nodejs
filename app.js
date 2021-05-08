@@ -10,6 +10,7 @@ const cors = require('cors'); // 引入cors模块
 const routes = require('./routes'); //导入自定义路由文件，创建模块化路由
 // const cookieParser = require('cookie-parser')
 const app = express();
+require('./utils/qiniu')
 
 app.use(bodyParser.json()); // 解析json数据格式
 app.use(bodyParser.urlencoded({ extended: true })); // 解析form表单提交的数据application/x-www-form-urlencoded
@@ -29,7 +30,7 @@ app.use(cors()); // 注入cors模块解决跨域
 
 app.use('/', routes);
 
-const hostname = '127.0.0.1';
+const hostname = '192.168.1.117';
 const port = 3000;
 
 app.listen(port, hostname, () => { // 监听8088端口

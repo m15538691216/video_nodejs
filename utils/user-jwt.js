@@ -28,10 +28,25 @@ const jwtAuth = expressJwt({
     '/',
     '/api/login',
     '/api/getVideo',
-    '/api/getLabel',
+    '/api/getVideo/details',
+    '/api/screen',
+    '/api/search',
+    '/api/screen/list',
     '/api/crawl/crawlVideo',
-    '/api/crawl/crawlVideoDetails',
-    '/api/crawl/crawlVideoPath'
+    '/api/crawl/getVideo',
+    '/api/crawl/crawlVideoPath',
+    '/api/found/getData',
+    '/api/getDanmaku',
+    '/api/getDanmaku/v3/',
+    '/api/teleplay/getList',
+    '/api/teleplay/details',
+    '/api/anime/getList',
+    '/api/anime/getDetails',
+    '/api/variety/getList',
+    '/api/variety/getDetails',
+    '/api/recom/list'
+
+
   ]
 })
 
@@ -42,18 +57,18 @@ function decode(req) {
 }
 
 
-function token(username) {
+function token(userInfo) {
   const token = jwt.sign(
-    { username },
+    { userInfo },
     PRIVATE_KEY,
     { expiresIn: JWT_EXPIRED }
   )
   return token;
 }
 
-function refreshToken(username) {
+function refreshToken(userInfo) {
   const refreshToken = jwt.sign(
-    { username },
+    { userInfo },
     PRIVATE_KEY,
     {
       expiresIn: REFRESH_TOKEN_EXPIRED,

@@ -12,8 +12,19 @@ const service = require('../services/commonService');
 
 
 
-// 获取视频列表
-router.get('/getLabel', service.getLabel);
+
+//搜索
+router.get('/search', service.getSearch)
+
+//分类
+router.get('/screen', service.getScreen)
+
+//分类列表
+router.get('/screen/list',service.getScreenList)
+
+
+//首页精选列表
+router.get('/recom/list',service.getRecomList)
 
 
 

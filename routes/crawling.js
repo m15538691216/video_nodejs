@@ -12,7 +12,7 @@ const service = require('../services/crawlingService');
 
 
 router.get('/crawlVideo',service.crawlVideo)
-// router.get('/crawlVideoDetails',service.crawlVideoDetails)
+router.get('/getVideo',service.getVideo)
 // router.get('/crawlVideoPath',service.crawlVideoPath)
 
 

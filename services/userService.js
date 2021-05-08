@@ -5,7 +5,8 @@
 */
 
 
-const { querySql, queryOne } = require('../utils/index');
+const { querySql, queryOne, validaErr } = require('../utils/index');
+const { qiniuToken } = require('../utils/qiniu')
 const md5 = require('../utils/md5');
 const jwt = require('jsonwebtoken');
 const boom = require('boom');
@@ -27,32 +28,31 @@ function login(req, res, next) {
     const [{ msg }] = err.errors;
     next(boom.badRequest(msg));
   } else {
-    let { username, password } = req.body;
+    let { userPhone, passWord } = req.body;
+
     // md5加密
     // password = md5(password);
-    const query = `select * from user where name='${username}' and password='${password}'`;
-    querySql(query)
+    const query = `select * from user where phone='${userPhone}' and password='${passWord}'`;
+    queryOne(query)
       .then(user => {
-        if (!user || user.length === 0) {
+        if (!user) {
           res.json({
             code: CODE_ERROR,
             msg: '用户名或密码错误',
             data: null
           })
         } else {
-          const accessToken = userJwt.token(username)
-          const refreshToken = userJwt.refreshToken(username)
+          const accessToken = userJwt.token({ userName: user.name, userId: user.id })
+          const refreshToken = userJwt.refreshToken({ userName: user.name, userId: user.id })
           let userData = {
-            id: user[0].id,
-            username: user[0].username,
-            nickname: user[0].nickname,
-            avator: user[0].avator,
-            sex: user[0].sex,
-            gmt_create: user[0].gmt_create,
-            gmt_modify: user[0].gmt_modify
+            id: user.id,
+            userName: user.name,
+            nickName: user.nickname,
+            avator: user.avator,
+            sex: user.sex,
+            gmt_create: user.gmt_create,
+            gmt_modify: user.gmt_modify
           };
-          // res.cookie("jwt", accessToken, { secure: true, httpOnly: true })
-          // res.cookie("jwt", accessToken, { maxAge: JWT_EXPIRED * 1000, signed: false, httpOnly: true });//设置cookie  secure 开启https
           res.json({
             code: CODE_SUCCESS,
             msg: '登录成功',
@@ -69,6 +69,13 @@ function login(req, res, next) {
   }
 }
 
+//注销登录
+function outLogin(req, res, next) {
+  if (validaErr(req)) {
+
+  }
+}
+
 
 //获取个人信息
 function findeUser(req, res, next) {
@@ -77,25 +84,27 @@ function findeUser(req, res, next) {
     const [{ msg }] = err.errors;
     next(boom.badRequest(msg));
   } else {
-
-    let { username } = req.query;
-    findUser(username).then(data => {
-      next()
-      if (data) {
+    const { userInfo } = userJwt.decode(req);
+    const query = `select * from user where id ='${userInfo.userId}'`;
+    queryOne(query).then(user => {
+      delete user.password
+      if (user) {
         res.json({
           code: CODE_SUCCESS,
           msg: "",
-          data: data
+          data: user
         })
       } else {
         res.json({
-          code: CODE_SUCCESS,
-          msg: "没有该用户！",
+          code: CODE_ERROR,
+          msg: "暂无此人！",
           data: ""
         })
       }
 
     })
+
+
   }
 
 }
@@ -107,9 +116,10 @@ function getrefreshToken(req, res, next) {
     const [{ msg }] = err.errors;
     next(boom.badRequest(msg));
   } else {
-    const username = userJwt.decode(req)
-    const accessToken = userJwt.token(username)
-    const refreshToken = userJwt.refreshToken(username)
+    const { userInfo } = userJwt.decode(req)
+
+    const accessToken = userJwt.token({ userName: userInfo.userName, userId: userInfo.userId })
+    const refreshToken = userJwt.refreshToken({ userName: userInfo.userName, userId: userInfo.userId })
     res.json({
       code: CODE_SUCCESS,
       msg: "刷新token",
@@ -133,10 +143,24 @@ function findUser(username) {
   return queryOne(query);
 }
 
+//
+function getQiniuToken(req, res, next) {
+  if (validaErr(req)) {
+    res.json({
+      code: CODE_SUCCESS,
+      msg: "七牛云Token",
+      data: {
+        qiniuToken:qiniuToken()
+      }
+    })
+  }
+}
+
 
 
 module.exports = {
   login,
   findeUser,
-  getrefreshToken
+  getrefreshToken,
+  getQiniuToken
 }

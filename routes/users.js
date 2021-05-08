@@ -12,14 +12,14 @@ const service = require('../services/userService');
 
 // 登录/注册校验
 const vaildator = [
-  body('username').isString().withMessage('用户名类型错误'),
-  body('password').isString().withMessage('密码类型错误')
+  body('userPhone').isString().withMessage('用户名类型错误'),
+  body('passWord').isString().withMessage('密码类型错误')
 
 ]
 
 // 重置密码校验
 const resetPwdVaildator = [
-  body('username').isString().withMessage('用户名类型错误'),
+  body('userPhone').isString().withMessage('用户名类型错误'),
   body('oldPassword').isString().withMessage('密码类型错误'),
   body('newPassword').isString().withMessage('密码类型错误')
 ]
@@ -32,6 +32,9 @@ router.post('/getrefreshToken', service.getrefreshToken);
 
 //通过用户名查询用户信息
 router.get('/findUser', service.findeUser);
+
+//
+router.get('/qiniu/token',service.getQiniuToken)
 
 
 module.exports = router;

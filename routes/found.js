@@ -7,20 +7,12 @@
 const express = require('express');
 const router = express.Router();
 const { body, query } = require('express-validator');
-const service = require('../services/videoService');
+const service = require('../services/foundService');
 
+//通过用户名查询用户信息
+router.post('/found/update', service.foundUpdate);
 
-
-
-// 获取视频列表
-router.get('/getVideo', service.getVideo);
-
-//获取电影详情
-router.get('/getVideo/details',service.getDetails);
-
-//
-
+router.get('/found/getData',service.foundGetData)
 
 
 module.exports = router;
-
